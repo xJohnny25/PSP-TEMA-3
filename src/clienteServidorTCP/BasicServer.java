@@ -3,10 +3,7 @@ package clienteServidorTCP;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+
 
 public class BasicServer {
 
@@ -35,44 +32,13 @@ public class BasicServer {
                 socketCliente = socketServidor.accept();
                 System.out.println("Conexión aceptada: " + socketCliente);
 
-                new Worker
-            }
-
-
-
-            entrada = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
-
-            salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketCliente.getOutputStream())), true);
-
-            // Hace eco de lo que le proporciona el cliente, hasta que recibe "Adios"
-            while (true) {
-                // Recibe la solicitud del cliente por el InputStream
-                String str = entrada.readLine();
-
-                ArrayList<String> palabras = new ArrayList<>();
-
-                for (String palabra : str.split(", ")){
-                    palabras.add(palabra);
-                }
-
-                // Envía a la salida estándar el mensaje del cliente
-                System.out.println("Cliente: " + str);
-                // Le envía la respuesta al cliente por el OutputStream
-                Collections.sort(palabras);
-
-                salida.println(palabras);
-                // Si es "Adios" es que finaliza la comunicación
-                if (str.equals("Adios")) {
-                    break;
-                }
+                new Worker(socketCliente).start();
             }
 
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         }
-        salida.close();
-        entrada.close();
-        socketCliente.close();
+
         socketServidor.close();
     }
 
